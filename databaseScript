@@ -1,0 +1,40 @@
+use cmpe226;
+
+
+create table passenger(email varchar(50) not null primary key, username varchar(50) not null, 
+passward varchar(50) not null, phone varchar(12) not null, 
+class varchar(12) not null, promocode varchar(10), foreign key(promocode) references promos(promocode) 
+ON DELETE SET NULL ON UPDATE CASCADE );
+
+
+create table driver(licensenumber varchar(50) not null primary key, email varchar(50) not null unique, 
+username varchar(50) not null, passward varchar(50) not null, phone varchar(12) not null, 
+class varchar(12) not null, bonuscode varchar(10), foreign key(bonuscode) references bonus(bonuscode) 
+ON DELETE SET NULL ON UPDATE CASCADE );
+
+
+
+create table ride(rideid varchar(50) not null primary key, starttime timestamp not null, 
+endtime timestamp, pickuplocation varchar(50) not null,  dropofflocation varchar(50) not null,
+cost decimal, cartype varchar(50) not null, reason varchar(50) not null, ridestatus varchar(10) not null,
+class varchar(12), driverrating varchar(10), passengerrating varchar(10), licensenumber varchar(50),
+email varchar(50), foreign key(licensenumber) references driver(licensenumber), foreign key(email) references passenger(email) 
+ ON DELETE SET NULL ON UPDATE CASCADE);
+
+create table car(registrationnumber varchar(50) not null primary key, model varchar(10) not null, 
+color varchar(10) not null,cartype varchar(10) not null, capacity int, licensenumber varchar(50),
+foreign key(licensenumber) references driver(licensenumber) ON DELETE SET NULL ON UPDATE CASCADE );
+
+create table promos(promocode varchar(50) not null primary key, discountprice decimal not null, email varchar(50), 
+foreign key(email) references admin(email)ON DELETE SET NULL ON UPDATE CASCADE);
+
+create table bonus(bonuscode varchar(50) not null primary key, amount decimal not null, email varchar(50), 
+foreign key(email) references admin(email)ON DELETE SET NULL ON UPDATE CASCADE);
+
+
+create table admin(email varchar(50) not null primary key, username varchar(50) not null, passward varchar(50) not null);
+
+
+create table carddetails(email varchar(50) not null, cardnumber varchar(50) not null, cardname varchar(50) not null, 
+expirydate varchar(10) not null, primary key(email, cardnumber), foreign key(email) references passenger(email) 
+ON DELETE CASCADE ON UPDATE CASCADE );
